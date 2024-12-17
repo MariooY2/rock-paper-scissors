@@ -16,9 +16,9 @@ enum Moves {
   Scissors = 3,
 }
 const moveImages = {
-  [Moves.Rock]: "/images/rock.png", // Replace with the actual path to your rock image
-  [Moves.Paper]: "/images/paper.png", // Replace with the actual path to your paper image
-  [Moves.Scissors]: "/images/scissors.png", // Replace with the actual path to your scissors image
+  [Moves.Rock]: "/images/rock.png",
+  [Moves.Paper]: "/images/paper.png",
+  [Moves.Scissors]: "/images/scissors.png",
 };
 type Player = [string, string, number];
 
