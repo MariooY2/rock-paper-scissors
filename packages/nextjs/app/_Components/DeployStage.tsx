@@ -48,6 +48,7 @@ const DeployStage: React.FC<DeployStageProps> = ({
           onChange={e => setBetAmount(e.target.value)}
           className="w-full p-2 mb-4 border rounded"
           step="0.01"
+          min="0"
         />
 
         {/* Deploy Button */}
