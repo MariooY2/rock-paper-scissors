@@ -5,14 +5,6 @@
 ## Description
 This is the final project for the Encode Club EVM certification. Players commit their moves on the blockchain using the commit-reveal pattern, ensuring fairness and transparency.
 
-## How it Works
-Players first commit their moves (rock, paper, or scissors) on the blockchain by hashing their move with a secret. Once both players have committed, they reveal their moves. The game logic then determines the winner based on the revealed moves.
-
-![Workflow](packages/nextjs/public/screenshots/4.png)
-![Workflow](packages/nextjs/public/screenshots/5.png)
-![Workflow](packages/nextjs/public/screenshots/2.png)
-![Workflow](packages/nextjs/public/screenshots/3.png)
-
 ## Setup Instructions
 
 ### Prerequisites
@@ -39,6 +31,14 @@ Players first commit their moves (rock, paper, or scissors) on the blockchain by
     ```
 
 4. Open your browser and navigate to `http://localhost:3000` to play the game.
+
+## How it Works
+Players first commit their moves (rock, paper, or scissors) on the blockchain by hashing their move with a secret. Once both players have committed, they reveal their moves. The game logic then determines the winner based on the revealed moves.
+
+![Workflow](packages/nextjs/public/screenshots/4.png)
+![Workflow](packages/nextjs/public/screenshots/5.png)
+![Workflow](packages/nextjs/public/screenshots/2.png)
+![Workflow](packages/nextjs/public/screenshots/3.png)
 
 ## Game Preview
 <img src="packages/nextjs/public/screenshots/1.png" alt="Game Screenshot" width="600" />
