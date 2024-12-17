@@ -2,6 +2,7 @@
 
 import { ReactNode, useEffect, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import ContractData from "../../../public/Game.json";
 import { encodePacked, formatEther, keccak256 } from "viem";
 import { useReadContract, useWriteContract } from "wagmi";
@@ -61,11 +62,6 @@ function Page({ params }: { params: { ContractAddress: string } }) {
     args: [1],
   });
 
-  const winnerQuery = useReadContract({
-    abi: ContractData.abi,
-    address: ContractAddress,
-    functionName: "viewWinner",
-  });
   const GameQuery = useReadContract({
     abi: ContractData.abi,
     address: ContractAddress,
@@ -81,7 +77,6 @@ function Page({ params }: { params: { ContractAddress: string } }) {
 
   const { data: State, isLoading: isStateLoading, isError: isStateError } = GameQuery;
 
-  const { data: winner, isLoading: isWinnerLoading, isError: isWinnerError, error: winnerError } = winnerQuery;
   const { data: betAmount, isLoading: isBetLoading, isError: isBetError, error: betError } = betAmountQuery;
 
   const { isLoading: isPlayer1Loading, isError: isPlayer1Error, error: player1Error } = player1Query;
@@ -89,6 +84,17 @@ function Page({ params }: { params: { ContractAddress: string } }) {
   const { isLoading: isPlayer2Loading, isError: isPlayer2Error, error: player2Error } = player2Query;
   const player2 = (player2Query.data as Player) || ["", "", 0];
 
+  const winnerQuery = useReadContract({
+    abi: ContractData.abi,
+    address: ContractAddress,
+    functionName: "viewWinner",
+    query: {
+      enabled: player1[2] != 0 && player2[2] != 0,
+    },
+  });
+  const { data: winner, isLoading: isWinnerLoading, isError: isWinnerError, error: winnerError } = winnerQuery;
+
+  const Router = useRouter();
   const commitMove = async (move: Moves, secret: string) => {
     if (!ContractAddress) {
       alert("Contract address not set. Please deploy the contract first.");
@@ -134,8 +140,6 @@ function Page({ params }: { params: { ContractAddress: string } }) {
   };
 
   const renderWinnerInfo = (playerMove: Moves | null) => {
-    
-    
     if (forfeiter != "0x0000000000000000000000000000000000000000") {
       return <p className="text-red-600 text-center">{forfeiter as ReactNode} Forfeited</p>;
     }
@@ -224,7 +228,7 @@ function Page({ params }: { params: { ContractAddress: string } }) {
         </div>
 
         <button
-          onClick={() => (window.location.href = "/")}
+          onClick={() => Router.push("/")}
           className="px-10 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 mb-5"
         >
           Restart
@@ -232,6 +236,20 @@ function Page({ params }: { params: { ContractAddress: string } }) {
       </div>
     );
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      betAmountQuery.refetch?.();
+      player1Query.refetch?.();
+      player2Query.refetch?.();
+      GameQuery.refetch?.();
+      ForfeitQuery.refetch?.();
+      if (player1[2] != 0 && player2[2] != 0) winnerQuery.refetch?.();
+      console.log("Refetching data...");
+    }, 7000);
+
+    return () => clearInterval(interval); // Cleanup interval on unmount
+  }, []);
 
   return (
     <div className="p-6 space-y-6 max-w-4xl mx-auto bg-white">
