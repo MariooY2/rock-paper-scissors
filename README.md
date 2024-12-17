@@ -32,6 +32,9 @@ This is the final project for the Encode Club EVM certification. Players commit 
 
 4. Open your browser and navigate to `http://localhost:3000` to play the game.
 
+## Game Preview
+<img src="packages/nextjs/public/screenshots/1.png" alt="Game Screenshot" width="600" />
+
 ## How it Works
 Players first commit their moves (rock, paper, or scissors) on the blockchain by hashing their move with a secret. Once both players have committed, they reveal their moves. The game logic then determines the winner based on the revealed moves.
 
@@ -40,8 +43,6 @@ Players first commit their moves (rock, paper, or scissors) on the blockchain by
 ![Workflow](packages/nextjs/public/screenshots/2.png)
 ![Workflow](packages/nextjs/public/screenshots/3.png)
 
-## Game Preview
-<img src="packages/nextjs/public/screenshots/1.png" alt="Game Screenshot" width="600" />
 
 ## License
 This project is licensed under the MIT License.
