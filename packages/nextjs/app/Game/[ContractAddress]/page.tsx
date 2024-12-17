@@ -199,40 +199,47 @@ function Page({ params }: { params: { ContractAddress: string } }) {
     const opponentMove = calculateOpponentMove(playerMove!, isUserWinner);
 
     return (
-      <div className="text-center shadow-lg rounded-lg w-300 lg:w-1/2">
-        {/*{isUserWinner && <Confetti width={500} height={1300} numberOfPieces={300} />}*/}
+      <div className="flex justify-center items-start">
+        <div className="text-center shadow-2xl rounded-lg w-300 lg:w-1/2 text-black">
+          {/*{isUserWinner && <Confetti width={500} height={1300} numberOfPieces={300} />}*/}
+          <p className="text-2xl font-bold text-black mt-5">{isUserWinner ? "🎉 You Won! 🎉" : "😢 You Lost! 😢"}</p>
+          <p className={`text-lg ${isUserWinner ? "text-green-500" : "text-red-500"}`}>
+            {isUserWinner
+              ? `Congrats! You won ${formatEther(betAmount as bigint)} ETH`
+              : `Better luck next time! The winner won ${formatEther(betAmount as bigint)} ETH`}
+          </p>
+          <div className="flex justify-center items-center gap-8 mt-4">
+            <div>
+              <p className="font-medium text-gray-700">Your Move</p>
+              <Image
+                src={moveImages[playerMove!]}
+                alt={Moves[playerMove!]}
+                width={100}
+                height={100}
+                className="wiggle"
+              />
+              <p>{Moves[playerMove!]}</p>
+            </div>
+            <div>
+              <p className="font-medium text-gray-700">Opponents Move</p>
+              <Image
+                src={moveImages[opponentMove]}
+                alt={Moves[opponentMove]}
+                width={100}
+                height={100}
+                className="wiggle"
+              />
+              <p>{Moves[opponentMove]}</p>
+            </div>
+          </div>
 
-        <p className="text-lg font-bold text-black mt-20">{isUserWinner ? "🎉 You Won! 🎉" : "😢 You Lost! 😢"}</p>
-        <p className={`text-lg ${isUserWinner ? "text-green-500" : "text-red-500"}`}>
-          {isUserWinner
-            ? `Congrats! You won ${formatEther(betAmount as bigint)} ETH`
-            : `Better luck next time! The winner won ${formatEther(betAmount as bigint)} ETH`}
-        </p>
-        <div className="flex justify-center items-center gap-8 mt-4">
-          <div>
-            <p className="font-medium text-gray-700">Your Move</p>
-            <Image src={moveImages[playerMove!]} alt={Moves[playerMove!]} width={100} height={100} className="wiggle" />
-            <p>{Moves[playerMove!]}</p>
-          </div>
-          <div>
-            <p className="font-medium text-gray-700">Opponents Move</p>
-            <Image
-              src={moveImages[opponentMove]}
-              alt={Moves[opponentMove]}
-              width={100}
-              height={100}
-              className="wiggle"
-            />
-            <p>{Moves[opponentMove]}</p>
-          </div>
+          <button
+            onClick={() => Router.push("/")}
+            className="px-10 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 mb-5"
+          >
+            Restart
+          </button>
         </div>
-
-        <button
-          onClick={() => Router.push("/")}
-          className="px-10 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 mb-5"
-        >
-          Restart
-        </button>
       </div>
     );
   };
@@ -265,7 +272,7 @@ function Page({ params }: { params: { ContractAddress: string } }) {
         <p>Error fetching bet amount: {betError.message}</p>
       ) : (
         <div className="text-center flex items-center bg-yellow-400 justify-center gap-2 border-2 border-yellow-400 rounded-lg p-1">
-          <p className="text-xl font-bold inline-block text-center text-white-400">
+          <p className="text-xl font-bold inline-block text-center text-white-400 shadow-2xl">
             Prize Amount: {formatEther(betAmount as bigint)?.toString()} ETH
           </p>
 
@@ -287,7 +294,7 @@ function Page({ params }: { params: { ContractAddress: string } }) {
         ) : isPlayer1Error ? (
           <p>Error fetching Player 1: {player1Error.message}</p>
         ) : (
-          <div className="bg-white p-4 rounded-lg shadow-lg space-y-4 w-300 lg:w-1/2">
+          <div className="bg-white p-4 rounded-lg shadow-2xl space-y-4 w-300 lg:w-1/2">
             {/* Player 1 Header */}
             <div className="flex items-center space-x-4">
               <img src="/images/girl.webp" alt="Player 1" className="w-16 h-16 object-cover rounded-full" />
@@ -340,7 +347,7 @@ function Page({ params }: { params: { ContractAddress: string } }) {
         ) : isPlayer2Error ? (
           <p>Error fetching Player 2: {player2Error.message}</p>
         ) : (
-          <div className="bg-white p-4 rounded-lg shadow-lg space-y-4 w-300 lg:w-1/2">
+          <div className="bg-white p-4 rounded-lg shadow-2xl space-y-4 w-300 lg:w-1/2">
             {/* Player 2 Header */}
             <div className="flex items-center space-x-4">
               <img src="/images/boy.webp" alt="Player 2" className="w-16 h-16 object-cover rounded-full" />

@@ -30,7 +30,7 @@ const CommitStage: React.FC<{
   const generateRandomSecret = () => Math.random().toString(36).substring(2, 15);
   const { address } = useAccount();
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+    <div className="mt-12 max-w-md mx-auto p-6 bg-white rounded-lg shadow-2xl">
       <h2 className="text-2xl font-bold mb-4 text-black">Commit Your Move</h2>
       <div className="grid grid-cols-3 gap-4 mb-4">
         {Object.values(Moves)
