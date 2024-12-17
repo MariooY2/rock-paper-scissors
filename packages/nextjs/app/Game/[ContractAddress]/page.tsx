@@ -141,7 +141,17 @@ function Page({ params }: { params: { ContractAddress: string } }) {
 
   const renderWinnerInfo = (playerMove: Moves | null) => {
     if (forfeiter != "0x0000000000000000000000000000000000000000") {
-      return <p className="text-red-600 text-center">{forfeiter as ReactNode} Forfeited</p>;
+      return (
+        <div className="text-center">
+          <p className="text-red-600 text-center">{forfeiter as ReactNode} Forfeited</p>
+          <button
+            onClick={() => Router.push("/")}
+            className="px-10 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 mb-5"
+          >
+            Restart
+          </button>
+        </div>
+      );
     }
 
     if (isWinnerLoading) return <p>Loading winner...</p>;
