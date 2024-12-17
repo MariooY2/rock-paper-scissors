@@ -41,11 +41,6 @@ function RevealStage({
         functionName: "revealMove",
         args: [move, secret],
       });
-
-      //alert("Move revealed successfully!");
-      setTimeout(() => {
-        window.location.reload();
-      }, 5000);
     } catch (error) {
       console.error("Error revealing move:", error);
       alert("Failed to reveal move.");

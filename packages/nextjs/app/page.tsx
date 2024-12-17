@@ -46,7 +46,6 @@ const RockPaperScissorsGame: React.FC = () => {
         const updatedAddresses = [...gameAddresses, contractAdd];
         setGameAddresses(updatedAddresses);
         localStorage.setItem("gameAddresses", JSON.stringify(updatedAddresses));
-
         Router.push(`/Game/${contractAdd}`);
       }
     } catch (error) {
@@ -77,27 +76,28 @@ const RockPaperScissorsGame: React.FC = () => {
           <h3 className="p-6 lg:text-4xl text-2xl">OR</h3>
         </div>
 
-        <div className="w-[400px] h-55 p-6 bg-white rounded-lg shadow-md flex flex-col justify-center gap-1" >
-          
-          <h4 className="text-l font-bold text-black">Already have a game started?</h4>
-          <div className="w-70">
-            <input
-              type="text"
-              value={inputAddress}
-              onChange={e => setInputAddress(e.target.value)}
-              placeholder="Enter Deployed Game Address"
-              className="mt-2 w-full p-2 border rounded text-black mb-4"
-            />
-            {!isAddressValid && inputAddress && <p className="text-red-500">Invalid Contract address</p>}
-          </div>
+        <div className="flex items-center justify-center max-w-md h-50 p-6 bg-white rounded-lg shadow-md mt-4">
+          <div className="p-4 border-black rounded-xl border-4">
+            <h4 className="text-l font-bold text-black">Already have a game started?</h4>
+            <div className="w-70">
+              <input
+                type="text"
+                value={inputAddress}
+                onChange={e => setInputAddress(e.target.value)}
+                placeholder="Enter Deployed Game Address"
+                className="mt-2 w-full p-2 border rounded text-black mb-4"
+              />
+              {!isAddressValid && inputAddress && <p className="text-red-500">Invalid Contract address</p>}
+            </div>
 
-          <button
-            onClick={handleNavigate}
-            className={`w-full p-3 rounded ${isAddressValid ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-400"}`}
-            disabled={!isAddressValid}
-          >
-            Go to Game
-          </button>
+            <button
+              onClick={handleNavigate}
+              className={`w-full p-3 rounded ${isAddressValid ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-400"}`}
+              disabled={!isAddressValid}
+            >
+              Go to Game
+            </button>
+          </div>
         </div>
       </div>
 

@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { useAccount } from "wagmi";
 import Image from "next/image";
+import { useAccount } from "wagmi";
 
 // Enum for moves
 enum Moves {
@@ -24,7 +24,6 @@ const CommitStage: React.FC<{
   player2: Player;
   onCommit: (move: Moves, secret: string) => void;
 }> = ({ onCommit, player1, player2 }) => {
-
   const [selectedMove, setSelectedMove] = useState<Moves | null>(null);
   const [secret, setSecret] = useState<string>("");
 
@@ -44,59 +43,24 @@ const CommitStage: React.FC<{
                 selectedMove === move ? "bg-blue-500 " : "bg-gray-200 text-gray-700 hover:bg-gray-300"
               }`}
             >
-               <Image
-                  src={moveImages[move as Moves]}
-                  alt={Moves[move as Moves]}
-                  width={50}
-                  height={50}
-                  className="mb-2"
-                />
+              <Image
+                src={moveImages[move as Moves]}
+                alt={Moves[move as Moves]}
+                width={50}
+                height={50}
+                className="mb-2"
+              />
             </button>
           ))}
       </div>
-{/*}
-      <div className="mb-4">
-        <label className="block mb-2 font-medium text-black">Secret:</label>
-        <input
-          type="text"
-          value={secret}
-          onChange={e => setSecret(e.target.value)}
-          placeholder="Enter or generate a secret"
-          className="w-full p-2 border rounded"
-        />
-        <button
-          onClick={() => setSecret(generateRandomSecret())}
-          className="mt-2 w-full bg-green-500 text-white p-2 rounded hover:bg-green-600"
-        >
-          Generate Random Secret
-        </button>
-      </div>
 
-      <button
-        onClick={() => selectedMove !== null && secret && onCommit(selectedMove, secret)}
-        className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-        disabled={
-          selectedMove === null ||
-          !secret ||
-          (address?.toLowerCase() != player1[0].toLowerCase() && address?.toLowerCase() != player2[0].toLowerCase()) ||
-          (address.toLowerCase() === player1[0].toLowerCase() &&
-            player1[1] !== "0x0000000000000000000000000000000000000000000000000000000000000000") ||
-          (address.toLowerCase() === player2[0].toLowerCase() &&
-            player2[1] !== "0x0000000000000000000000000000000000000000000000000000000000000000")
-        }
-      >
-        Commit Move
-      </button>
-*/}
       <button
         onClick={() => {
           if (selectedMove !== null) {
             const newSecret = generateRandomSecret(); // Generate the secret
             setSecret(newSecret); // Update the state
             onCommit(selectedMove, newSecret);
-            setTimeout(() => {
-              window.location.reload();
-            }, 5000);          }
+          }
         }}
         className="w-full bg-blue-500 text-white p-5 rounded hover:bg-blue-600"
         disabled={
@@ -110,7 +74,6 @@ const CommitStage: React.FC<{
       >
         Choose Move
       </button>
-
     </div>
   );
 };
