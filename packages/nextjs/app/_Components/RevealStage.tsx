@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import ContractData from "../../public/Game.json";
-import { useWriteContract } from "wagmi";
+import { useAccount, useWriteContract } from "wagmi";
 
 enum Moves {
   Rock = 1,
@@ -14,20 +14,24 @@ const moveImages = {
   [Moves.Paper]: "/images/paper.png",
   [Moves.Scissors]: "/images/scissors.png",
 };
-
+type Player = [string, string, number];
 function RevealStage({
   contractAddress,
   move,
   secret,
+  player1,
+  player2,
   surrender,
 }: {
   contractAddress: string;
   move: Moves;
   secret: string;
+  player1: Player;
+  player2: Player;
   surrender: () => void;
 }) {
   const { writeContract } = useWriteContract();
-
+  const { address } = useAccount();
   const handleReveal = async () => {
     if (!move || !secret) {
       alert("Move or secret is missing.");
@@ -46,6 +50,11 @@ function RevealStage({
       alert("Failed to reveal move.");
     }
   };
+
+  if (address == player1[0] && player1[2] != 0)
+    return <h1 className="text-center text-4xl text-black mt-5">Waiting for Player 2</h1>;
+  if (address == player2[0] && player2[2] != 0)
+    return <h1 className="text-center text-4xl text-black mt-5">Waiting for Player 1</h1>;
 
   return (
     <div className="reveal-stage p-4 border rounded-lg">

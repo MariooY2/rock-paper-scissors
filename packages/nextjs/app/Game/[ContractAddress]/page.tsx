@@ -4,6 +4,7 @@ import { ReactNode, useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import ContractData from "../../../public/Game.json";
+import { access } from "fs";
 import { encodePacked, formatEther, keccak256 } from "viem";
 import { useReadContract, useWriteContract } from "wagmi";
 import { useAccount } from "wagmi";
@@ -259,7 +260,7 @@ function Page({ params }: { params: { ContractAddress: string } }) {
   }, []);
 
   return (
-    <div className="p-6 space-y-6 max-w-4xl mx-auto bg-white">
+    <div className="min-h-[98vh] p-6 space-y-6 max-w-4xl mx-auto bg-white">
       {/* Logo */}
       <div className="flex justify-center mb-6">
         <Image src="/images/rps-logo.png" width={400} height={400} alt="Rock Paper Scissors" className="mx-auto" />
@@ -275,7 +276,6 @@ function Page({ params }: { params: { ContractAddress: string } }) {
           <p className="text-xl font-bold inline-block text-center text-white-400 shadow-2xl">
             Prize Amount: {formatEther(betAmount as bigint)?.toString()} ETH
           </p>
-
           <Image
             src="/images/white-eth2.png" // Replace with the actual path to your Ethereum logo
             alt="Ethereum"
@@ -376,7 +376,6 @@ function Page({ params }: { params: { ContractAddress: string } }) {
               </div>
             </div>
 
-            {/* Player 2 Info */}
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 border rounded-lg flex items-center justify-between">
                 <span className="font-medium text-gray-600">Move Chosen</span>
@@ -403,19 +402,18 @@ function Page({ params }: { params: { ContractAddress: string } }) {
         <>
           {State == 0 && <CommitStage onCommit={commitMove} player1={player1} player2={player2} />}
           {State == 1 && (
-            <RevealStage contractAddress={ContractAddress} move={move as Moves} secret={secret} surrender={surrender} />
+            <RevealStage
+              contractAddress={ContractAddress}
+              move={move as Moves}
+              secret={secret}
+              surrender={surrender}
+              player1={player1}
+              player2={player2}
+            />
           )}
           {State == 2 && renderWinnerInfo(move)}
         </>
       )}
-
-      {/*}
-       <p className="font-medium text-gray-600">
-        Move: {move ? Moves[move] : "Waiting for move..."}
-      </p>
-      <p className="font-medium text-gray-600">
-        Secret: {secret || "Waiting for secret..."}
-      </p>*/}
     </div>
   );
 }

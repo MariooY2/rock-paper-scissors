@@ -29,6 +29,12 @@ const CommitStage: React.FC<{
 
   const generateRandomSecret = () => Math.random().toString(36).substring(2, 15);
   const { address } = useAccount();
+
+  if (address == player1[0] && player1[1] != "0x0000000000000000000000000000000000000000000000000000000000000000")
+    return <h1 className="text-center text-4xl text-black mt-5">Waiting for Player 2</h1>;
+  if (address == player2[0] && player2[1] != "0x0000000000000000000000000000000000000000000000000000000000000000")
+    return <h1 className="text-center text-4xl text-black mt-5">Waiting for Player 1</h1>;
+
   return (
     <div className="mt-12 max-w-md mx-auto p-6 bg-white rounded-lg shadow-2xl">
       <h2 className="text-2xl font-bold mb-4 text-black">Commit Your Move</h2>
