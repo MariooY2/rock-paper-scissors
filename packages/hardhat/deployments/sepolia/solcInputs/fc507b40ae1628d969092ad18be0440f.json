@@ -1,0 +1,36 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/Game.sol": {
+      "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n//0x5B38Da6a701c568545dCfcB03FcB875f56beddC4,0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2,100\r\n//bytes32: 0x78de04dcdd9084ccf4d9673d2a7dfebc8858ce873d90a9a75074aac751f84d74\r\n//bytes32: 0x6c39517b8f978d93dbfa31ce527d0b6c08706838b5ef2650ca7ce1c7eddff087\r\n\r\ncontract Game {\r\n    enum Move { None, Rock, Paper, Scissors }\r\n    enum GameState { WaitingForPlayers, WaitingForReveal, Completed }\r\n\r\n    struct Player {\r\n        address payable addr;\r\n        bytes32 commitment;\r\n        Move move;\r\n    }\r\n\r\n    Player[2] public players;\r\n    uint256 public betAmount;\r\n    uint256 public revealDeadline;\r\n    GameState public gameState;\r\n\r\n    modifier onlyPlayer() {\r\n        require(msg.sender == players[0].addr || msg.sender == players[1].addr, \"Not a player\");\r\n        _;\r\n    }\r\n\r\n    constructor(address payable _player1, address payable _player2, uint256 _betAmount) {\r\n        players[0] = Player(_player1, bytes32(0), Move.None);\r\n        players[1] = Player(_player2, bytes32(0), Move.None);\r\n        betAmount = _betAmount;\r\n        gameState = GameState.WaitingForPlayers;\r\n    }\r\n\r\n    function generateCommitment(Move move, string memory secret) external pure returns (bytes32) {\r\n    return keccak256(abi.encodePacked(move, secret));\r\n}\r\n\r\n    function commitMove(bytes32 commitment) external payable onlyPlayer {\r\n        require(gameState == GameState.WaitingForPlayers, \"Not accepting commitments\");\r\n        require(msg.value == betAmount, \"Incorrect bet amount\");\r\n\r\n        Player storage player = msg.sender == players[0].addr ? players[0] : players[1];\r\n        require(player.commitment == bytes32(0), \"Move already committed\");\r\n\r\n        player.commitment = commitment;\r\n\r\n        // Check if both players have committed\r\n        if (players[0].commitment != bytes32(0) && players[1].commitment != bytes32(0)) {\r\n            gameState = GameState.WaitingForReveal;\r\n            revealDeadline = block.timestamp + 1 days; // 1-day deadline for revealing moves\r\n        }\r\n    }\r\n\r\n    function revealMove(Move move, string memory secret) external onlyPlayer {\r\n        require(gameState == GameState.WaitingForReveal, \"Not accepting reveals\");\r\n        Player storage player = msg.sender == players[0].addr ? players[0] : players[1];\r\n        require(player.move == Move.None, \"Move already revealed\");\r\n        require(keccak256(abi.encodePacked(move, secret)) == player.commitment, \"Invalid move or secret\");\r\n\r\n        player.move = move;\r\n\r\n        // Check if both players have revealed\r\n        if (players[0].move != Move.None && players[1].move != Move.None) {\r\n            determineWinner();\r\n        }\r\n    }\r\n\r\n    function determineWinner() internal {\r\n        Move move1 = players[0].move;\r\n        Move move2 = players[1].move;\r\n\r\n        // Logic to determine the winner\r\n        if (move1 == move2) {\r\n            // Draw\r\n            players[0].addr.transfer(betAmount);\r\n            players[1].addr.transfer(betAmount);\r\n        } else if (\r\n            (move1 == Move.Rock && move2 == Move.Scissors) ||\r\n            (move1 == Move.Paper && move2 == Move.Rock) ||\r\n            (move1 == Move.Scissors && move2 == Move.Paper)\r\n        ) {\r\n            // Player 1 wins\r\n            players[0].addr.transfer(address(this).balance);\r\n        } else {\r\n            // Player 2 wins\r\n            players[1].addr.transfer(address(this).balance);\r\n        }\r\n\r\n        gameState = GameState.Completed;\r\n    }\r\n\r\n    function forfeit() external onlyPlayer {\r\n        require(gameState == GameState.WaitingForReveal, \"Cannot forfeit now\");\r\n        require(block.timestamp > revealDeadline, \"Reveal deadline not passed\");\r\n\r\n        Player storage forfeiter = msg.sender == players[0].addr ? players[0] : players[1];\r\n        Player storage opponent = msg.sender == players[0].addr ? players[1] : players[0];\r\n\r\n        require(forfeiter.move == Move.None, \"You already revealed\");\r\n\r\n        opponent.addr.transfer(address(this).balance);\r\n        gameState = GameState.Completed;\r\n    }\r\n\r\n    function viewWinner() external view returns (address) {\r\n    require(gameState == GameState.Completed, \"Game is not yet completed\");\r\n    require(players[0].move != Move.None && players[1].move != Move.None, \"Not all players revealed their moves\");\r\n\r\n    Move move1 = players[0].move;\r\n    Move move2 = players[1].move;\r\n\r\n    if (move1 == move2) {\r\n        return address(0); // Draw: return address(0) to indicate no winner\r\n    } else if (\r\n        (move1 == Move.Rock && move2 == Move.Scissors) ||\r\n        (move1 == Move.Paper && move2 == Move.Rock) ||\r\n        (move1 == Move.Scissors && move2 == Move.Paper)\r\n    ) {\r\n        return players[0].addr; // Player 1 wins\r\n    } else {\r\n        return players[1].addr; // Player 2 wins\r\n    }\r\n}\r\n}\r\n"
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "evmVersion": "paris",
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}

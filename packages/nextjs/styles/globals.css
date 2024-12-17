@@ -1,0 +1,87 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+
+
+@font-face {
+  font-family: 'CustomFont';
+  src: url('/fonts/Slackey-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+:root,
+[data-theme] {
+  background: oklch(var(--b2));
+}
+
+body {
+  min-height: 100vh;
+  font-family: 'CustomFont', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+p {
+  margin: 1rem 0;
+}
+
+.btn {
+  @apply shadow-md;
+}
+
+.btn.btn-ghost {
+  @apply shadow-none;
+}
+@keyframes wiggle {
+  0%, 100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
+
+.wiggle {
+  display: inline-block;
+  animation: wiggle 0.5s ease-in-out infinite;
+}
+/* Add this to your global CSS file */
+
+/* Shine effect */
+.shine-effect {
+  background: linear-gradient(90deg, #eefc1e, #d6ff21, #ffffff);
+  background-size: 200% auto;
+  animation: shine 2s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* Wiggle animation */
+.wiggle {
+  animation: wiggle 1s ease-in-out infinite;
+}
+
+@keyframes wiggle {
+  0%, 100% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+}
