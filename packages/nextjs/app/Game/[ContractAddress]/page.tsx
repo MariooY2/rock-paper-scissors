@@ -502,8 +502,10 @@ function Page({ params }: { params: { ContractAddress: string } }) {
         <>State Load Error</>
       ) : (
         <>
-          {State == 0 && <CommitStage onCommit={commitMove} player1={player1} player2={player2} />}
-          {State == 1 && (
+          {State == 0 && (address?.address == player1[0] || address?.address == player2[0]) && (
+            <CommitStage onCommit={commitMove} player1={player1} player2={player2} />
+          )}
+          {State == 1 && (address?.address == player1[0] || address?.address == player2[0]) && (
             <RevealStage
               contractAddress={ContractAddress}
               move={move as Moves}

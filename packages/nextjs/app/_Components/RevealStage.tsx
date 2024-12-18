@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import ContractData from "../../public/Game.json";
+import { FaSpinner } from "react-icons/fa";
 import { useAccount, useWriteContract } from "wagmi";
 
 enum Moves {
@@ -52,10 +53,23 @@ function RevealStage({
   };
 
   if (address == player1[0] && player1[2] != 0)
-    return <h1 className="text-center text-4xl text-black mt-5">Waiting for Player 2</h1>;
+    return (
+      <>
+        <h1 className="text-center text-xl text-black mt-5 flex items-center justify-center gap-2">
+          <FaSpinner className="animate-spin text-blue-500" />
+          Waiting for Player 2
+        </h1>
+      </>
+    );
   if (address == player2[0] && player2[2] != 0)
-    return <h1 className="text-center text-4xl text-black mt-5">Waiting for Player 1</h1>;
-
+    return (
+      <>
+        <h1 className="text-center text-xl text-black mt-5 flex items-center justify-center gap-2">
+          <FaSpinner className="animate-spin text-blue-500" />
+          Waiting for Player 1
+        </h1>
+      </>
+    );
   return (
     <div className="reveal-stage p-4 border rounded-lg">
       <h2 className="text-xl font-bold mb-4 text-black items-center justify-center text-center">Chosen Move:</h2>

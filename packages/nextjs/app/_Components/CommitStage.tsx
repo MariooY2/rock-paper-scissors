@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import { FaSpinner } from "react-icons/fa";
 import { useAccount } from "wagmi";
 
 // Enum for moves
@@ -31,10 +32,23 @@ const CommitStage: React.FC<{
   const { address } = useAccount();
 
   if (address == player1[0] && player1[1] != "0x0000000000000000000000000000000000000000000000000000000000000000")
-    return <h1 className="text-center text-4xl text-black mt-5">Waiting for Player 2</h1>;
+    return (
+      <>
+        <h1 className="text-center text-xl text-black mt-5 flex items-center justify-center gap-2">
+          <FaSpinner className="animate-spin text-blue-500" />
+          Waiting for Player 2
+        </h1>
+      </>
+    );
   if (address == player2[0] && player2[1] != "0x0000000000000000000000000000000000000000000000000000000000000000")
-    return <h1 className="text-center text-4xl text-black mt-5">Waiting for Player 1</h1>;
-
+    return (
+      <>
+        <h1 className="text-center text-xl text-black mt-5 flex items-center justify-center gap-2">
+          <FaSpinner className="animate-spin text-blue-500" />
+          Waiting for Player 1
+        </h1>
+      </>
+    );
   return (
     <div className="mt-12 max-w-md mx-auto p-6 bg-white rounded-lg shadow-2xl">
       <h2 className="text-2xl font-bold mb-4 text-black">Commit Your Move</h2>
