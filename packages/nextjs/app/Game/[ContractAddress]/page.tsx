@@ -20,7 +20,7 @@ const moveImages = {
   [Moves.Rock]: "/images/rock.png",
   [Moves.Paper]: "/images/paper.png",
   [Moves.Scissors]: "/images/scissors.png",
-};
+} as const satisfies Record<Moves, string>;
 type Player = [string, string, number];
 
 function Page({ params }: { params: { ContractAddress: string } }) {
@@ -144,7 +144,9 @@ function Page({ params }: { params: { ContractAddress: string } }) {
     if (forfeiter != "0x0000000000000000000000000000000000000000") {
       return (
         <div className="text-center">
-          <p className="text-red-600 text-center">{forfeiter as ReactNode} Forfeited</p>
+          <p className="text-red-600 text-center">{`${
+            forfeiter === player1[0] ? "Player 1" : "Player 2"
+          } Forfeited`}</p>
           <button
             onClick={() => Router.push("/")}
             className="px-10 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 mb-5"
@@ -160,8 +162,45 @@ function Page({ params }: { params: { ContractAddress: string } }) {
 
     // Check if the game resulted in a draw
     if (winner === "0x0000000000000000000000000000000000000000") {
+      // Spectator view for draw
+      if (
+        address.address?.toLowerCase() !== player1[0].toLowerCase() &&
+        address.address?.toLowerCase() !== player2[0].toLowerCase()
+      ) {
+        return (
+          <div className="text-center shadow-2xl">
+            <p className="text-lg font-bold text-black mt-10 ">🤝 It's a Draw! Players had the same move.</p>
+            <div className="flex justify-center items-center gap-4 mt-4">
+              <div>
+                <p className="font-medium text-gray-700">Player 1 Move</p>
+                <Image
+                  src={moveImages[player1[2] as Moves]}
+                  alt={Moves[player1[2]]}
+                  width={100}
+                  height={100}
+                  className="wiggle"
+                />
+                <p>{Moves[player1[2]]}</p>
+              </div>
+              <div>
+                <p className="font-medium text-gray-700">Player 2 Move</p>
+                <Image
+                  src={moveImages[player2[2] as Moves]}
+                  alt={Moves[player2[2]]}
+                  width={100}
+                  height={100}
+                  className="wiggle"
+                />
+                <p>{Moves[player2[2]]}</p>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // Player view for draw
       return (
-        <div className="text-center">
+        <div className="text-center shadow-2xl">
           <p className="text-lg font-bold text-black mt-10">🤝 Its a Draw! Try again.</p>
           <div className="flex justify-center items-center gap-4 mt-4">
             <div>
@@ -191,12 +230,67 @@ function Page({ params }: { params: { ContractAddress: string } }) {
       );
     }
 
-    // Check if the user won
+    // Determine the winner
+    const isPlayer1Winner =
+      typeof winner === "string" &&
+      typeof player1[0] === "string" &&
+      player1[0].toLowerCase().trim() === winner.toLowerCase().trim();
+
+    // Spectator view
+    if (
+      address.address?.toLowerCase() !== player1[0].toLowerCase() &&
+      address.address?.toLowerCase() !== player2[0].toLowerCase()
+    ) {
+      return (
+        <div className="flex justify-center items-start">
+          <div className="text-center shadow-2xl rounded-lg w-300 lg:w-1/2 text-black">
+            <p className="text-2xl font-bold text-black mt-5">
+              {isPlayer1Winner ? "🎉 Player 1 Won! 🎉" : "🎉 Player 2 Won! 🎉"}
+            </p>
+            <p className={`text-lg ${isPlayer1Winner ? "text-green-500" : "text-red-500"}`}>
+              {`The winner won ${formatEther(betAmount as bigint)} ETH`}
+            </p>
+            <div className="flex justify-center items-center gap-8 mt-4">
+              <div>
+                <p className="font-medium text-gray-700">Player 1 Move</p>
+                <Image
+                  src={moveImages[player1[2] as Moves]}
+                  alt={Moves[player1[2]]}
+                  width={100}
+                  height={100}
+                  className="wiggle"
+                />
+                <p>{Moves[player1[2]]}</p>
+              </div>
+              <div>
+                <p className="font-medium text-gray-700">Player 2 Move</p>
+                <Image
+                  src={moveImages[player2[2] as Moves]}
+                  alt={Moves[player2[2]]}
+                  width={100}
+                  height={100}
+                  className="wiggle"
+                />
+                <p>{Moves[player2[2]]}</p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => Router.push("/")}
+              className="px-10 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 mb-5"
+            >
+              Restart
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // Player view (for both Player 1 and Player 2)
     const isUserWinner =
       typeof winner === "string" &&
       typeof address?.address === "string" &&
       address.address.toLowerCase().trim() === winner.toLowerCase().trim();
-    //console.log("winner:", isUserWinner);
 
     const calculateOpponentMove = (myMove: Moves, won: boolean): Moves => {
       if (won) {
@@ -207,12 +301,12 @@ function Page({ params }: { params: { ContractAddress: string } }) {
       }
     };
 
+    const isPlayer1User = address.address?.toLowerCase() === player1[0].toLowerCase();
     const opponentMove = calculateOpponentMove(playerMove!, isUserWinner);
 
     return (
       <div className="flex justify-center items-start">
         <div className="text-center shadow-2xl rounded-lg w-300 lg:w-1/2 text-black">
-          {/*{isUserWinner && <Confetti width={500} height={1300} numberOfPieces={300} />}*/}
           <p className="text-2xl font-bold text-black mt-5">{isUserWinner ? "🎉 You Won! 🎉" : "😢 You Lost! 😢"}</p>
           <p className={`text-lg ${isUserWinner ? "text-green-500" : "text-red-500"}`}>
             {isUserWinner
@@ -254,7 +348,6 @@ function Page({ params }: { params: { ContractAddress: string } }) {
       </div>
     );
   };
-
   useEffect(() => {
     const interval = setInterval(() => {
       betAmountQuery.refetch?.();
