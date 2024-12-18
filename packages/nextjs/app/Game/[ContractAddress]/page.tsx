@@ -31,7 +31,7 @@ function Page({ params }: { params: { ContractAddress: string } }) {
   const address = useAccount();
 
   useEffect(() => {
-    if (!address) return; // Ensure the address is available before fetching
+    if (!address || typeof window === "undefined") return; // Ensure the address is available before fetching
     const savedMove = localStorage.getItem(`player_${address.address}_move`);
     const savedSecret = localStorage.getItem(`player_${address.address}_secret`);
 
@@ -377,7 +377,7 @@ function Page({ params }: { params: { ContractAddress: string } }) {
       ) : (
         <div className="text-center flex items-center bg-yellow-400 justify-center gap-2 border-2 border-yellow-400 rounded-lg p-1">
           <p className="text-xl font-bold inline-block text-center text-white-400 shadow-2xl">
-            Prize Amount: {formatEther(betAmount as bigint)?.toString()} ETH
+            Prize Amount: {betAmount ? formatEther(betAmount as bigint)?.toString() : "0"} ETH
           </p>
           <Image
             src="/images/white-eth2.png" // Replace with the actual path to your Ethereum logo
