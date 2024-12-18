@@ -169,7 +169,7 @@ function Page({ params }: { params: { ContractAddress: string } }) {
       ) {
         return (
           <div className="text-center shadow-2xl">
-            <p className="text-lg font-bold text-black mt-10 ">🤝 It's a Draw! Players had the same move.</p>
+            <p className="text-lg font-bold text-black mt-10 ">🤝 It&apos;s a Draw! Players had the same move.</p>
             <div className="flex justify-center items-center gap-4 mt-4">
               <div>
                 <p className="font-medium text-gray-700">Player 1 Move</p>
@@ -296,7 +296,7 @@ function Page({ params }: { params: { ContractAddress: string } }) {
       if (won) {
         return myMove === Moves.Rock ? Moves.Scissors : myMove === Moves.Paper ? Moves.Rock : Moves.Paper;
       } else {
-        // If the user lost, the opponent had a move that beats the player's move
+        // If the user lost, the opponent had a move that beats the playes move
         return myMove === Moves.Rock ? Moves.Paper : myMove === Moves.Paper ? Moves.Scissors : Moves.Rock;
       }
     };
