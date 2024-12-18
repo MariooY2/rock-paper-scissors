@@ -376,7 +376,7 @@ function Page({ params }: { params: { ContractAddress: string } }) {
       ) : (
         <div className="text-center flex items-center bg-yellow-400 justify-center gap-2 border-2 border-yellow-400 rounded-lg p-1">
           <p className="text-xl font-bold inline-block text-center text-white-400 shadow-2xl">
-            Prize Amount: {betAmount ? Number(formatEther(betAmount as bigint)?.toString()) * 2 : "0"} ETH
+            Prize Amount: {betAmount ? (2 * parseFloat(formatEther(betAmount as bigint))).toString() : "0"} ETH
           </p>
           <Image
             src="/images/white-eth2.png" // Replace with the actual path to your Ethereum logo
