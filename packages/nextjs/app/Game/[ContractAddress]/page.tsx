@@ -248,7 +248,7 @@ function Page({ params }: { params: { ContractAddress: string } }) {
               {isPlayer1Winner ? "🎉 Player 1 Won! 🎉" : "🎉 Player 2 Won! 🎉"}
             </p>
             <p className={`text-lg ${isPlayer1Winner ? "text-green-500" : "text-red-500"}`}>
-              {`The winner won ${formatEther(betAmount as bigint)} ETH`}
+              {`The winner won ${betAmount ? formatEther(betAmount as bigint)?.toString() : " "} ETH`}
             </p>
             <div className="flex justify-center items-center gap-8 mt-4">
               <div>
@@ -310,8 +310,8 @@ function Page({ params }: { params: { ContractAddress: string } }) {
           <p className="text-2xl font-bold text-black mt-5">{isUserWinner ? "🎉 You Won! 🎉" : "😢 You Lost! 😢"}</p>
           <p className={`text-lg ${isUserWinner ? "text-green-500" : "text-red-500"}`}>
             {isUserWinner
-              ? `Congrats! You won ${formatEther(betAmount as bigint)} ETH`
-              : `Better luck next time! The winner won ${formatEther(betAmount as bigint)} ETH`}
+              ? `Congrats! You won ${betAmount && formatEther(betAmount as bigint)} ETH`
+              : `Better luck next time! The winner won ${betAmount && formatEther(betAmount as bigint)} ETH`}
           </p>
           <div className="flex justify-center items-center gap-8 mt-4">
             <div>
