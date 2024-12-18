@@ -1,10 +1,9 @@
 "use client";
 
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import ContractData from "../../../public/Game.json";
-import { access } from "fs";
 import { encodePacked, formatEther, keccak256 } from "viem";
 import { useReadContract, useWriteContract } from "wagmi";
 import { useAccount } from "wagmi";
@@ -156,7 +155,7 @@ function Page({ params }: { params: { ContractAddress: string } }) {
         </div>
       );
     }
-
+    console.log(player1[2], player2[2]);
     if (isWinnerLoading) return <p>Loading winner...</p>;
     if (isWinnerError) return <p>Error fetching winner: {winnerError?.message}</p>;
 
@@ -206,24 +205,24 @@ function Page({ params }: { params: { ContractAddress: string } }) {
             <div>
               <p className="font-medium text-gray-700">Your Move</p>
               <Image
-                src={moveImages[playerMove!]}
-                alt={Moves[playerMove!]}
+                src={moveImages[player1[0] == address.address ? (player1[2] as Moves) : (player2[2] as Moves)]}
+                alt={Moves[player1[0] == address.address ? (player1[2] as Moves) : (player2[2] as Moves)]}
                 width={100}
                 height={100}
                 className="wiggle"
               />
-              <p>{Moves[playerMove!]}</p>
+              <p>{Moves[player1[0] == address.address ? (player1[2] as Moves) : (player2[2] as Moves)]}</p>
             </div>
             <div>
               <p className="font-medium text-gray-700">Opponents Move</p>
               <Image
-                src={moveImages[playerMove!]}
-                alt={Moves[playerMove!]}
+                src={moveImages[player1[0] == address.address ? (player1[2] as Moves) : (player2[2] as Moves)]}
+                alt={Moves[player1[0] == address.address ? (player1[2] as Moves) : (player2[2] as Moves)]}
                 width={100}
                 height={100}
                 className="wiggle"
               />
-              <p>{Moves[playerMove!]}</p>
+              <p>{Moves[player1[0] == address.address ? (player1[2] as Moves) : (player2[2] as Moves)]}</p>
             </div>
           </div>
         </div>
