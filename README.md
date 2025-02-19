@@ -1,4 +1,4 @@
-# Rock Paper Scissors Game 🎮
+# Decentralized Rock-Paper-Scissors Game
 
 ![Logo](packages/nextjs/public/images/logo-rps.png)
 
